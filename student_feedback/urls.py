@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from feedback import urls as feedback_urls
-from admin import urls as admin_urls
+from administrator import urls as admin_urls
 
 urlpatterns = [
     path("", include(feedback_urls)),
