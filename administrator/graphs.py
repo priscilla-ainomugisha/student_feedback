@@ -1,21 +1,11 @@
 import streamlit as st
 import pandas as pd
 import os
-from supabase import create_client, Client
-
-# url: str = os.environ.get("SUPABASE_URL")
-# key: str = os.environ.get("SUPABASE_KEY")
-
-# supabase: Client = create_client(url, key)
-
-# response = supabase.table("course_review").select("*").execute()
 
 df = pd.read_csv("mine.csv")
 
 # df = pd.DataFrame(response.data * num)
 # df.drop("Token", axis=1)
-
-# st.write(response.data)
 
 st.title("Course Review")
 style = """
