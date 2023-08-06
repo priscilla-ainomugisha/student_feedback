@@ -2,12 +2,20 @@ import streamlit as st
 import pandas as pd
 import os
 
+# st.experimental_set_query_params(query_params={"page": ""})
+txt = st.experimental_get_query_params()
 df = pd.read_csv("mine.csv")
+# st.write(txt["page"][0])
 
 # df = pd.DataFrame(response.data * num)
 # df.drop("Token", axis=1)
+if txt["page"][0] == "course":
+    st.title("Course Review")
+elif txt["page"][0] == "facilities":
+    st.title("Facilities Review")
+elif txt["page"][0] == "instructors":
+    st.title("Instructors Review")
 
-st.title("Course Review")
 style = """
 <style>
 .ea3mdgi2{
