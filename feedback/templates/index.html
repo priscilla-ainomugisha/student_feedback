@@ -92,9 +92,9 @@
             <!-- Semester -->
             <h2>Course feedback</h2>
             <label for="semester">Select semester:</label>
-            <select id="semester">
+            <select id="semester_id">
                 {% for semester in semester_data %}
-                <option value="{{ semester_.id }}">{{ semester_.semester }}</option>
+                <option value="{{ semester.id }}">{{ semester.semester }}</option>
                 {% endfor %}
             </select>
             <button onclick="loadCourseUnits()">Load Course Units</button>

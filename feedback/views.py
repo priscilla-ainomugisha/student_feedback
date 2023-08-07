@@ -90,7 +90,7 @@ def year_of_study(request):
 
 def semester(request):
     semester_data = Semester.objects.all()
-    return render(request, 'index.html', {'semester_': semester_data})
+    return render(request, 'index.html', {'semester_data': semester_data})
 
 def get_card_title(request):
     card = Card_info.objects.first()

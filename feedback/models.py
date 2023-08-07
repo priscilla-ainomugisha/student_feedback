@@ -45,26 +45,28 @@ class YearOfStudy(models.Model):
         return self.year_of_study
 
 class Semester(models.Model):
-    code = models.CharField(db_column='CODE', max_length=10, blank=True, null=True)  # Field name made lowercase.
-    course_name = models.CharField(db_column='COURSE_NAME', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    cu = models.IntegerField(db_column='CU', blank=True, null=True)  # Field name made lowercase.
-    lh = models.IntegerField(db_column='LH', blank=True, null=True)  # Field name made lowercase.
-    ph = models.IntegerField(db_column='PH', blank=True, null=True)  # Field name made lowercase.
-    th = models.IntegerField(db_column='TH', blank=True, null=True)  # Field name made lowercase.
-    ch = models.IntegerField(db_column='CH', blank=True, null=True)  # Field name made lowercase.
-    type = models.CharField(db_column='Type', max_length=20, blank=True, null=True)  # Field name made lowercase.
-    remark = models.CharField(db_column='Remark', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    origin = models.CharField(db_column='Origin', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    program = models.CharField(db_column='Program', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    id = models.AutoField(primary_key=True)
+    code = models.CharField(db_column='CODE', max_length=10, blank=True, null=True)
+    course_name = models.CharField(db_column='COURSE_NAME', max_length=100, blank=True, null=True)
+    cu = models.IntegerField(db_column='CU', blank=True, null=True)
+    lh = models.IntegerField(db_column='LH', blank=True, null=True)
+    ph = models.IntegerField(db_column='PH', blank=True, null=True)
+    th = models.IntegerField(db_column='TH', blank=True, null=True)
+    ch = models.IntegerField(db_column='CH', blank=True, null=True)
+    type = models.CharField(db_column='Type', max_length=20, blank=True, null=True)
+    remark = models.CharField(db_column='Remark', max_length=50, blank=True, null=True)
+    origin = models.CharField(db_column='Origin', max_length=50, blank=True, null=True)
+    program = models.CharField(db_column='Program', max_length=50, blank=True, null=True)
     year_of_study = models.IntegerField(blank=True, null=True)
     semester = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'course_info'
 
     def __str__(self):
         return self.semester
+
     
 class Card_info(models.Model):
     id = models.AutoField(null=False,primary_key=True)
