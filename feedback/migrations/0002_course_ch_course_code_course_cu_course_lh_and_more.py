@@ -10,16 +10,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name="course",
-            name="CH",
-            field=models.CharField(default="", max_length=10),
-        ),
-        migrations.AddField(
-            model_name="course",
-            name="CODE",
-            field=models.CharField(max_length=10, null=True),
-        ),
+        #migrations.AddField(
+            #model_name="course",
+            #name="CH",
+            #field=models.CharField(default="", max_length=10),
+        #),
+        #migrations.AddField(
+            #model_name="course",
+            #name="CODE",
+            #field=models.CharField(max_length=10, null=True),
+        #),
         migrations.AddField(
             model_name="course",
             name="CU",

@@ -4,11 +4,21 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.http import JsonResponse
+from .models import CourseInfo
+from .models import YearOfStudy
+from .models import Semester
+from .models import Card_info
+import re
+from feedback.forms import MultiStepForm,Card_info
+from django.shortcuts import render
+from formtools.wizard.views import SessionWizardView
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 def index(request):
-    return render(request, "index.html")
+    return render(request, 'index.html')
+
 
 
 def signin(request):
@@ -25,6 +35,9 @@ def login(request):
 
 def logout(request):
     return render(request, "logout.html")
+
+def form(request):
+    return render(request, "form.html")
 
 
 @login_required()
@@ -47,3 +60,63 @@ def register(request):
 
 def home(request):
     return render(request, 'feedback/home.html')
+
+def get_course_units(request):
+    if request.method == "GET":
+        selected_semester = request.GET.get("semester", "1")  # Default to "1" if not provided
+        selected_year = int(request.GET.get("year_of_study", 1))  # Default to 1 if not provided
+
+        # Convert semester to an integer
+        try:
+            selected_semester = int(selected_semester)
+        except ValueError:
+            selected_semester = 1  # Set a default value in case of invalid input
+
+        # Query the database for course units based on the selected semester and year
+        course_units = CourseInfo.objects.filter(semester=selected_semester, year_of_study=selected_year)
+        course_units_list = [CourseInfo.COURSE_NAME for CourseInfo in course_units]
+
+        return JsonResponse({"course_units": course_units_list})
+
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+def year_of_study(request):
+    years_of_study = YearOfStudy.objects.all()
+    return render(request, 'index.html', {'years_of_study': years_of_study})
+
+def semester(request):
+    semester_data = Semester.objects.all()
+    return render(request, 'index.html', {'semester_': semester_data})
+
+def get_card_title(request):
+    card = Card_info.objects.first()
+    return render(request, 'index.html', {'card_title': card.course_name})
+
+
+def multi_step_form_view(request):
+    if request.method == 'POST':
+        form = MultiStepForm(request.POST)
+        if form.is_valid():
+            # Process form data here
+            # For example, you can access form.cleaned_data to get the validated data.
+            # Do something with the data and redirect to a success page.
+            pass
+    else:
+        form = MultiStepForm()
+
+    return render(request, 'form.html', {'form': form})
+
+
+
+def show_message_form_condition(wizard):
+    # try to get the cleaned data of step 1
+    cleaned_data = wizard.get_cleaned_data_for_step('0') or {}
+    # check if the field ``leave_message`` was checked.
+    return cleaned_data.get('leave_message', True)
+
+class ContactWizard(SessionWizardView):
+
+    def done(self, form_list, **kwargs):
+        return render(self.request, 'done.html', {
+            'form_data': [form.cleaned_data for form in form_list],
+        })

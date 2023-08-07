@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     #own 
     "feedback",
     'crispy_forms',
-    "crispy_bootstrap4",
+    'crispy_bootstrap4',
+    'formtools'
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
