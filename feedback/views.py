@@ -21,22 +21,20 @@ from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 def index(request):
-    if request.method == 'POST':
-        selected_semester = request.GET.get("semester", "1")  # Default to "1" if not provided
-        selected_year = int(request.GET.get("year_of_study", 1))  # Default to 1 if not provided
+    selected_semester = request.GET.get("semester", "1")  # Default to "1" if not provided
+    selected_year = int(request.GET.get("year_of_study", 1))  # Default to 1 if not provided
 
 
-        # Query the database for course units based on the selected semester and year
-        course_units = CourseInfo.objects.filter(semester=selected_semester, year_of_study=selected_year)
-        course_units_list = [CourseInfo.COURSE_NAME for CourseInfo in course_units]
+    # Query the database for course units based on the selected semester and year
+    course_units = CourseInfo.objects.filter(semester=selected_semester, year_of_study=selected_year)
+    course_units_list = [CourseInfo.course_name for CourseInfo in course_units]
 
-        return JsonResponse({"course_units": course_units_list})
 
     course = CourseInfo.objects.all()
     semester_data = set([x.semester for x in course])
     
     years_of_study = set([x.year_of_study for x in course])
-    return render(request, 'index.html', {'semester_data': semester_data, 'years_of_study': years_of_study, 'type': type(semester_data)})
+    return render(request, 'index.html', {'semester_data': semester_data, 'years_of_study': years_of_study, 'courses': course_units_list})
 
 
 
