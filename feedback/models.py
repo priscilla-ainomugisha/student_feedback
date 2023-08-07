@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 class CourseInfo(models.Model):
@@ -101,3 +102,35 @@ class Feedback(models.Model):
     applicability_reasoning  = models.CharField(max_length=100)
     recommend_course  = models.CharField(max_length=100)
     # Other fields from the form go here
+    class Meta:
+        db_table = 'student_answers'
+    
+
+class MultiStepForm(ModelForm):
+    class Meta:
+        model = Feedback
+        fields = [
+            'lecturer_preparedness',
+            'lecturer_interest',
+            'feedback_useful',
+            'lecturers_complement',
+            'instructional_materials',
+            'course_organization',
+            'confidence_in_advanced_work',
+            'exam_measurement',
+            'concept_understanding',
+            'concept_understanding_feedback',
+            'applicability',
+            'applicability_reasoning',
+            'recommend_course',
+        ]
+
+    def save(self, commit=True):
+        form_data = self.cleaned_data
+        # Save the form data to the database.
+        form_instance = super().save(commit=False)
+        if commit:
+            form_instance.save()
+            return form_instance
+
+     

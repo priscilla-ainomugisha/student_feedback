@@ -1,7 +1,9 @@
+from imaplib import _Authenticator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from .forms import UserRegisterForm
+from django.views import View
+from .forms import SignInForm, UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -10,10 +12,12 @@ from .models import YearOfStudy
 from .models import Semester
 from .models import Card_info
 import re
-from feedback.forms import MultiStepForm,Card_info
+from .forms import MultiStepForm,Card_info
 from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
+
+
 
 # Create your views here.
 def index(request):
@@ -27,11 +31,11 @@ def signin(request):
 def base(request):
     return render(request, "base.html")
 
-#def home(request):
-    #return render(request, "home.html")
+
 
 def login(request):
     return render(request, "login.html")
+
 
 def logout(request):
     return render(request, "logout.html")
@@ -92,15 +96,18 @@ def get_card_title(request):
     card = Card_info.objects.first()
     return render(request, 'index.html', {'card_title': card.course_name})
 
+def success_page_view(request):
+    return render(request, 'success_page.html')
+
 
 def multi_step_form_view(request):
     if request.method == 'POST':
         form = MultiStepForm(request.POST)
         if form.is_valid():
-            # Process form data here
-            # For example, you can access form.cleaned_data to get the validated data.
-            # Do something with the data and redirect to a success page.
-            pass
+            form.save() 
+            messages.success(request, 'Form submitted successfully!')
+            return redirect('success-page') 
+            
     else:
         form = MultiStepForm()
 
@@ -120,3 +127,17 @@ class ContactWizard(SessionWizardView):
         return render(self.request, 'done.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
+
+from .forms import SignInForm
+
+def sign_in_view(request):
+    if request.method == 'POST':
+        form = SignInForm(request.POST)
+        if form.is_valid():
+            # Process sign-in logic (e.g., authentication, session handling, etc.)
+            # Redirect to another page after successful sign-in.
+            return redirect('index')
+    else:
+        form = SignInForm()
+
+    return render(request, 'login.html', {'form': form})

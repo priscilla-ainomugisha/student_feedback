@@ -1,3 +1,4 @@
+from urllib import request
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -14,6 +15,11 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+class SignInForm(forms.Form):
+    username = forms.CharField(max_length=100, label='Username')
+    password = forms.CharField(widget=forms.PasswordInput, label='Password')
+
 
 class MultiStepForm(forms.Form):
     LECTURER_PREPAREDNESS_CHOICES = (
@@ -120,7 +126,7 @@ class MultiStepForm(forms.Form):
         required=True
     )
 
-    lectures_complement = forms.ChoiceField(
+    lecturers_complement = forms.ChoiceField(
         label="The lectures, tests, and assignments complemented each other.",
         choices=LECTURES_COMPLEMENT_CHOICES,
         widget=forms.RadioSelect,
@@ -201,7 +207,7 @@ class MultiStepForm(forms.Form):
     help_text=(
         'Please rate your likelihood of recommending this course to other students on a scale of 0 to 10, where 0 is not likely at all and 10 is very likely. The value you enter must be a number between 0 and 10.'
     )
-)
+    )
 
 
     def __init__(self, *args, **kwargs):
@@ -210,10 +216,16 @@ class MultiStepForm(forms.Form):
         self.fields['recommend_course'].help_text = (
             'Please rate your likelihood of recommending this course to other students on a scale of 0 to 10, where 0 is not likely at all and 10 is very likely.'
         )
+    def save(self, *args, **kwargs):
+        form_data = self.cleaned_data  # Use self.cleaned_data to access the validated form data
+        saved_form = Feedback(**form_data)  # Assuming FeedbackModel is a Django model
+        saved_form.save()
+        return saved_form
     
     class Meta:
         model = Feedback
         fields = (
+            'card_info'
             'lecturer_preparedness',
             'lecturer_interest',
             'feedback_useful',
@@ -232,5 +244,6 @@ class MultiStepForm(forms.Form):
 FeedbackFormSet = inlineformset_factory(Card_info,Feedback,form=MultiStepForm,
                       fields=['institution','date_from','date_to','achievements'],
                       extra=1,can_delete=True)
+
 
 
