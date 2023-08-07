@@ -44,7 +44,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans:wght@800&display=swap" rel="stylesheet">
     </head>
     <body id="bg" >
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-navbar">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/in-logo-1.svg' %}" alt=""></a>
@@ -80,25 +79,28 @@
             {% endif %}
         </div>
         <div class="container-sm">
+            <form action="/index" method="post"></form>
             <!-- index.html --> 
-            <h2>Course feedback</h2>
+            <h2>Enter details</h2>
             <!-- Year of study -->
             <label for="year_of_study">Choose year of study:</label>
-            <select id="year_of_study">
+            <select id="year_of_study" select>
                 {% for year in years_of_study %}
-                <option value="{{ year.id }}">{{ year.year_of_study }}</option>
+                <option value="{{ year.id }}">{{ year }}</option>
                 {% endfor %}
             </select>
             <!-- Semester -->
             <h2>Course feedback</h2>
             <label for="semester">Select semester:</label>
-            <select id="semester_id">
+            <select id="semester_id" name="semester">
                 {% for semester in semester_data %}
-                <option value="{{ semester.id }}">{{ semester.semester }}</option>
+                <option value="{{ semester.id }}">{{ semester }}</option>
                 {% endfor %}
             </select>
-            <button onclick="loadCourseUnits()">Load Course Units</button>
-            <!--TESTING PYTHON FORM-->
+            
+            <input class="btn btn-primary" type="submit" value="Submit">
+        </form>
+            </div>
            
 
             <div  id="courseUnitsContainer" class="course-units">
