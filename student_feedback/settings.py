@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "feedback",
     'crispy_forms',
     "crispy_bootstrap4",
+    "administrator",
+
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
