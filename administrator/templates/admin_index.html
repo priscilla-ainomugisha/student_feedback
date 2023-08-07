@@ -1,4 +1,14 @@
-{% extends 'base_admin.html' %} {% block content %}
+{% extends 'base_admin.html' %}{% block courses %}
+{% if pages == "course" %}active
+{% endif %}{% endblock courses %}
+{% block facilities %}
+{% if pages == "facilities" %}active
+{% endif %}{% endblock facilities %}
+{% block instructors %}
+{% if pages == "instructors" %}active{% endif %}
+{% endblock instructors %}
+{% block content %}
+
 <iframe
   width="100%"
   height="720"

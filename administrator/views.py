@@ -14,7 +14,7 @@ def index(request):
 
 @login_required(login_url="/administrator/signin")
 def course(request):
-    return render(request, "admin_index.html", context={"pages": "course"})
+    return render(request, "admin_index.html", context={"pages": "course", "value": True})
 
 
 @login_required(login_url="/administrator/signin")
@@ -35,8 +35,11 @@ def signin(request):
         if user is None:
             return HttpResponseRedirect("/administrator/signin")
         else:
-            login(request, user)
-            return HttpResponseRedirect("/administrator/course")
+            if user.is_superuser:
+                login(request, user)
+                return HttpResponseRedirect("/administrator/course")
+            else:
+                return HttpResponseRedirect("/login")
     else:
         return render(request, "sign_in.html")
 
