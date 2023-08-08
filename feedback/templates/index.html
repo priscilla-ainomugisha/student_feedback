@@ -53,12 +53,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        <a class="nav-link" href="#year_of_study">Student</a>
-                        <a class="nav-link" href="#">Staff</a>
-                        <a class="nav-link" href="#admin/">Admin</a>
+                        <a class="nav-link" href="/administrator/course">Admin</a>
                     </div>
-                    <form class="d-flex" id="authstyle">
+                   <!-- <form class="d-flex" id="authstyle">
                         {% if user.is_authenticated %}
                             <a href="{% url 'profile' %}" class="btn" style="color: white; background-color: #14fd27;" type="submit" id="header-links">Profile</a>
                             <a href="{% url 'logout' %}" class="btn" style="color: white; background-color: #14fd27;" type="submit" id="header-links">Logout</a>
@@ -66,7 +63,7 @@
                             <a href="{% url 'register' %}" class="btn" style="color: white; background-color: #14fd27;" type="submit" id="header-links">Create Account</a>
                             <a href="{% url 'login' %}" class="btn" style="color: white; background-color: #14fd27; margin-left: 10px;" type="submit" id="header-links">Log In</a>
                         {% endif %}
-                    </form>
+                    </form>-->
                 </div>
             </div>
         </nav>
@@ -104,8 +101,8 @@
            
 
             <div  id="courseUnitsContainer" class="course-units">
-                <h2>Select course unit</h2>
                 <div class="container mt-4">
+                <h2>Select course unit</h2>
                     <div class="row row-cols-1 row-cols-md-5">
                         <div class="col mb-4">
                             <div class="card">

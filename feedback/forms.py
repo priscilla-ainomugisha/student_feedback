@@ -204,18 +204,12 @@ class MultiStepForm(forms.Form):
     ],
     coerce=lambda value: value[0],
     widget=forms.RadioSelect,
-    help_text=(
-        'Please rate your likelihood of recommending this course to other students on a scale of 0 to 10, where 0 is not likely at all and 10 is very likely. The value you enter must be a number between 0 and 10.'
-    )
     )
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['recommend_course'].help_text = (
-            'Please rate your likelihood of recommending this course to other students on a scale of 0 to 10, where 0 is not likely at all and 10 is very likely.'
-        )
     def save(self, *args, **kwargs):
         form_data = self.cleaned_data  # Use self.cleaned_data to access the validated form data
         saved_form = Feedback(**form_data)  # Assuming FeedbackModel is a Django model

@@ -1,5 +1,5 @@
 from imaplib import _Authenticator
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.views import View
@@ -15,6 +15,8 @@ import re
 from .forms import MultiStepForm,Card_info
 from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 
 
@@ -47,7 +49,18 @@ def base(request):
 
 
 def login(request):
-    return render(request, "login.html")
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(username=username, password=password)
+        if user is None:
+            print('No User')
+            return HttpResponseRedirect("/login")
+        else:
+            print('User')
+            return HttpResponseRedirect("/index")
+    else:
+        return render(request, "login.html")
 
 
 def logout(request):

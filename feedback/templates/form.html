@@ -11,7 +11,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            <form method="post"id ="step-form">
+            <form method="post"id ="step-form" class="m-5">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="text-end">
