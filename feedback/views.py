@@ -1,52 +1,51 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-import re
+from django.contrib.auth import login, logout, authenticate
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from formtools.wizard.views import SessionWizardView
-from django.core.files.storage import FileSystemStorage
 
 
-# Create your views here.
-def index(request):
-    selected_semester = request.GET.get(
-        "semester", "1"
-    )  # Default to "1" if not provided
-    selected_year = int(
-        request.GET.get("year_of_study", 1)
-    )  # Default to 1 if not provided
-
-    # Query the database for course units based on the selected semester and year
-    course_units = CourseInfo.objects.filter(
-        semester=selected_semester, year_of_study=selected_year
-    )
-    course_units_list = [CourseInfo.course_name for CourseInfo in course_units]
-
-    course = CourseInfo.objects.all()
-    semester_data = set([x.semester for x in course])
-
-    years_of_study = set([x.year_of_study for x in course])
-    return render(
-        request,
-        "index.html",
-        {
-            "semester_data": semester_data,
-            "years_of_study": years_of_study,
-            "courses": course_units_list,
-        },
-    )
-
-
+# Create your views here
 def signin(request):
-    return render(request, "signin.html")
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return HttpResponseRedirect("/administrator/signin")
+        else:
+            if user.is_superuser:
+                login(request, user)
+                return HttpResponseRedirect("/administrator/course")
+            else:
+                return HttpResponseRedirect("/")
+    else:
+        return render(request, "auth/signin.html")
 
 
-def login(request):
-    return render(request, "login.html")
+def log_out(request):
+    logout(request=request)
+    return HttpResponseRedirect("/login")
 
 
-def logout(request):
-    return render(request, "logout.html")
-
-
+@login_required(login_url="/login")
 def facility_feedback(request):
     return render(request, "facility_feedback.html")
+
+
+@login_required(login_url="/login")
+def instructor_feedback(request):
+    return render(request, "facility_feedback.html")
+
+
+@login_required(login_url="/login")
+def course_feedback(request):
+    return render(request, "facility_feedback.html")
+
+
+@login_required(login_url="/login")
+def index(request):
+    if request.user.is_authenticated:
+        print(True)
+    else:
+        print(False)
+    return render(request, "index.html")
