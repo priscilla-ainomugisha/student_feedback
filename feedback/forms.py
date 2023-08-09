@@ -6,7 +6,9 @@ from django import forms
 from feedback.models import Card_info, Facilities
 from feedback.models import Feedback
 from django.forms.models import BaseInlineFormSet, inlineformset_factory
-from django.forms import modelformset_factory
+from django.forms import Field, modelformset_factory
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit
 
 
 class UserRegisterForm(UserCreationForm):
@@ -39,9 +41,9 @@ class MultiStepForm(forms.Form):
     )
 
     USEFUL_FEEDBACK_CHOICES = (
-        ('yes', 'Yes'),
-        ('a_few_sometimes', 'A few Sometimes'),
-        ('rarely', 'Rarely'),
+        (1, '👍'),   # Unicode character for X emoji
+        (2, '👎'),   # Unicode character for star emoji
+        
     )
 
     LECTURES_COMPLEMENT_CHOICES = (
@@ -108,107 +110,124 @@ class MultiStepForm(forms.Form):
     lecturer_preparedness = forms.ChoiceField(
         label="The lecturer was well prepared for the class.",
         choices=LECTURER_PREPAREDNESS_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.Select(attrs={'class': 'select'}),
         required=True
     )
 
     lecturer_interest = forms.ChoiceField(
         label="The lecturer showed an interest in helping students learn.",
         choices=LECTURER_INTEREST_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     feedback_useful = forms.ChoiceField(
         label="I received useful feedback on my performance on tests, papers, etc.",
         choices=USEFUL_FEEDBACK_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     lecturers_complement = forms.ChoiceField(
         label="The lectures, tests, and assignments complemented each other.",
         choices=LECTURES_COMPLEMENT_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.Select(attrs={'class': 'select'}),
         required=True
     )
 
     instructional_materials = forms.ChoiceField(
         label="The instructional materials (i.e., books, readings, handouts, study guides, lab manuals, multimedia, software) increased my knowledge and skills in the subject matter.",
         choices=INSTRUCTIONAL_MATERIALS_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     course_organization = forms.ChoiceField(
         label="The course was organized in a manner that helped me understand the underlying concepts.",
         choices=COURSE_ORGANIZATION_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     confidence_in_advanced_work = forms.ChoiceField(
         label="The course gave me the confidence to do more advanced work in the subject.",
         choices=CONFIDENCE_IN_ADVANCED_WORK_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     exam_measurement = forms.ChoiceField(
         label="The examinations, projects measured my knowledge of the course material",
         choices=EXAM_MEASUREMENT_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     concept_understanding = forms.ChoiceField(
         label="Rate your understanding of the course concepts",
         choices=RATING_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={'class': 'radio'}),
         required=True
     )
 
     concept_understanding_feedback = forms.CharField(
-        widget=forms.Textarea,
-        label="Your feedback",
+        widget=forms.Textarea(attrs={'class': 'textarea'}),
+        label="Share with us",
         required=False
     )
 
     applicability = forms.ChoiceField(
         label="Rate your understanding of the course concepts",
         choices=RATING_CHOICES,
-        widget=forms.RadioSelect,
+        widget=forms.NumberInput(attrs={'class': 'custom-slider','type': 'range', 'min': '1', 'max': '5', 'step': '1'}),
         required=True
     )
 
     applicability_reasoning = forms.CharField(
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={'class': 'textarea'}),
         label="Why do you think so?",
         required=False
     )
 
     recommend_course = forms.TypedChoiceField(
-    label="Would you recommend this course to others?",
+    label="On a scale of 1-10, recommend this course to others",
     choices=[
-        (0, 'Not likely at all'),
-        (1, 'Unlikely'),
-        (2, 'Somewhat unlikely'),
-        (3, 'Neither likely nor unlikely'),
-        (4, 'Somewhat likely'),
-        (5, 'Likely'),
-        (6, 'Very likely'),
-        (7, 'Extremely likely'),
-        (8, 'Almost certainly'),
-        (9, 'Definitely'),
-        (10, 'Absolutely'),
+        
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+        (9, '9'),
+        (10, '10'),
     ],
     coerce=lambda value: value[0],
-    widget=forms.RadioSelect,
+    widget=forms.RadioSelect(attrs={'class': 'card'})
     )
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'lecturer_preparedness',
+            'lecturer_interest',
+            'feedback_useful',
+            'lecturers_complement',
+            'instructional_materials',
+            'course_organization',
+            'confidence_in_advanced_work',
+            'exam_measurement',
+            'concept_understanding',
+            'concept_understanding_feedback',
+            'applicability',
+            'applicability_reasoning',
+            'recommend_course',
+            Submit('submit', 'Submit', css_class='btn btn-primary')
+        )
 
     def save(self, *args, **kwargs):
         form_data = self.cleaned_data  # Use self.cleaned_data to access the validated form data
@@ -266,24 +285,24 @@ class CampusFacilitiesFeedbackForm(forms.Form):
     )
 
     SUGGESTIONS_MAX_LENGTH = 5000
+    Lecture_rooms = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect(attrs={'class': 'radio'}))
+    halls_of_residence = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect(attrs={'class': 'radio'}))
+    cafeterias = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect(attrs={'class': 'radio'}))
+    sports_equipment = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect(attrs={'class': 'radio'}))
+    facility_availability = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect(attrs={'class': 'radio'}))
+    equipment_access = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect(attrs={'class': 'radio'}))
+    usage_frequency = forms.ChoiceField(label="How often do you use campus facilities?",choices=USAGE_FREQUENCY_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    Labs_usage= forms.ChoiceField(label="How often do you use the campus labs?" ,choices=CONVENIENCE_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    facility_up_to_date = forms.ChoiceField(label="How up-to-date are campus facilities?",choices=CONVENIENCE_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    school_resources_availability = forms.ChoiceField(label="How readily available are school resources to aid your studies?List your suggestions below. ",choices=CONVENIENCE_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    library_usage = forms.ChoiceField(label="How often do you use the campus library? ",choices=USAGE_FREQUENCY_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    coursework_improvement = forms.CharField(label="How can school resources be improved to aid students’ coursework? List your suggestions below.  ",widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH, 'class': 'textarea'}))
+    sports_equipment_adequacy = forms.ChoiceField(label="How adequate is the school sports equipment? ",choices=CONVENIENCE_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    sports_facilities_wish = forms.CharField(label="Are there any sports facilities you would like the university to provide? ",widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH,'class': 'textarea'}))
+    equipment_wish = forms.CharField(label="Please list them below.",widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH,'class': 'textarea'}))
+    overall_satisfaction = forms.ChoiceField(label="How satisfied are you with the overall experience at this university?  ",choices=RATING_CHOICES, widget=forms.Select(attrs={'class': 'select'}),)
+    experience_improvement = forms.CharField(label="How can your experience at this university be improved? Please leave your comments below.? ",widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH,'class': 'textarea'}))
 
-    halls_of_residence = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
-    cafeterias = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
-    Lecture_rooms = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
-    sports_equipment = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
-    facility_availability = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
-    equipment_access = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
-    usage_frequency = forms.ChoiceField(choices=USAGE_FREQUENCY_CHOICES)
-    Labs_usage= forms.ChoiceField(choices=CONVENIENCE_CHOICES)
-    facility_up_to_date = forms.ChoiceField(choices=CONVENIENCE_CHOICES)
-    school_resources_availability = forms.ChoiceField(choices=CONVENIENCE_CHOICES)
-    library_usage = forms.ChoiceField(choices=USAGE_FREQUENCY_CHOICES)
-    coursework_improvement = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
-    sports_equipment_adequacy = forms.ChoiceField(choices=CONVENIENCE_CHOICES)
-    sports_facilities_wish = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
-    equipment_wish = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
-    experience_improvement = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
-    overall_satisfaction = forms.ChoiceField(choices=RATING_CHOICES)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

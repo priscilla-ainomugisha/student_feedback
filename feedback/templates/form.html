@@ -1,3 +1,5 @@
+
+
 {% extends 'feedback/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
@@ -11,12 +13,118 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            <form method="post"id ="step-form" class="m-5">
+            <form method="post"id ="step-form" class="step_form">
+                <h2>Courses Feedback Form</h2>
+                <hr>
                 {% csrf_token %}
-                {{ form.as_p }}
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+            
+                <div class="form-group">
+                    <label for="{{ form.lecturer_preparedness.id_for_label }}">
+                        1.{{ form.lecturer_preparedness.label }}
+                    </label>
+                    <div class="custom-radio">
+                    {{ form.lecturer_preparedness}}
+                    </div>
                 </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.lecturer_interest.id_for_label }}">
+                        2.{{ form.lecturer_interest.label }}
+                    </label>
+                    {{ form.lecturer_interest }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.feedback_useful.id_for_label }}">
+                        3.{{ form.feedback_useful.label }}
+                    </label>
+                    {{ form.feedback_useful }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.lecturers_complement.id_for_label }}">
+                        4.{{ form.lecturers_complement.label }}
+                    </label>
+                    {{ form.lecturers_complement }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.instructional_materials.id_for_label }}">
+                        5. {{ form.instructional_materials.label }}
+                    </label>
+                    {{ form.instructional_materials }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.course_organization.id_for_label }}">
+                        6.{{ form.course_organization.label }}
+                    </label>
+                    {{ form.course_organization }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.confidence_in_advanced_work.id_for_label }}">
+                        7.{{ form.confidence_in_advanced_work.label }}
+                    </label>
+                    {{ form.confidence_in_advanced_work }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.exam_measurement.id_for_label }}">
+                        8.{{ form.exam_measurement.label }}
+                    </label>
+                    {{ form.exam_measurement }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.concept_understanding.id_for_label }}">
+                        9.{{ form.concept_understanding.label }}
+                    </label>
+                    {{ form.concept_understanding }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.concept_understanding_feedback.id_for_label }}">
+                        {{ form.concept_understanding_feedback.label }}
+                    </label>
+                    {{ form.concept_understanding_feedback }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.applicability.id_for_label }}">
+                        10.{{ form.applicability.label }}
+                    </label>
+                    {{ form.applicability }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.applicability_reasoning.id_for_label }}">
+                        {{ form.applicability_reasoning.label }}
+                    </label>
+                    {{ form.applicability_reasoning }}
+                </div>
+                <p> </p>
+                <div class="form-group">
+                    <label for="{{ form.recommend_course.id_for_label }}">
+                        11.{{ form.recommend_course.label }}
+                    </label>
+                    <div class="horizontal-cards">
+                        
+                        {% for value, label in form.recommend_course.field.choices %}
+                        <label class="card">
+                            <input type="radio" name="{{ form.recommend_course.name }}" value="{{ value }}" class="radio">
+                            <div class="card-content">
+                                <span>{{ label }}</span>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Repeat the above structure for the remaining fields -->
+            
+                <button type="submit" class="btn btn-primary" > Submit</button>
+            
             </form>
         </div>
 {% endblock %}
