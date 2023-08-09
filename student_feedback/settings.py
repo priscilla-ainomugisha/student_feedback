@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     #own 
     "feedback",
     'crispy_forms',
-    "crispy_bootstrap4",
+    
     "administrator",
 
 ]
