@@ -34,18 +34,14 @@ def facility_feedback(request):
 
 @login_required(login_url="/login")
 def instructor_feedback(request):
-    return render(request, "facility_feedback.html")
+    return render(request, "instructor_feedback.html")
 
 
 @login_required(login_url="/login")
 def course_feedback(request):
-    return render(request, "facility_feedback.html")
+    return render(request, "course_feedback.html")
 
 
 @login_required(login_url="/login")
 def index(request):
-    if request.user.is_authenticated:
-        print(True)
-    else:
-        print(False)
     return render(request, "index.html")
