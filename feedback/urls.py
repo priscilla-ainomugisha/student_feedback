@@ -1,4 +1,6 @@
+
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
@@ -15,6 +17,6 @@ urlpatterns = [
 
     path('index/form.html', views. multi_step_form_view, name='form'),
     path('form/', views.multi_step_form_view, name='feedback'),
-    path('success-page/', views.success_page_view, name='success-page'),]
-
-
+    path('success-page/', views.success_page_view, name='success-page'),
+    path('index/facilitiesform.html/', views.facilities, name='success-page'),
+    ]

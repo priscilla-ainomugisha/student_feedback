@@ -134,5 +134,57 @@ class MultiStepForm(ModelForm):
         if commit:
             form_instance.save()
             return form_instance
+    
+
+class Facilities (models.Model):
+    halls_of_residence = models.CharField(max_length=100)
+    cafeterias = models.CharField(max_length=100)
+    Lecture_rooms =models.CharField(max_length=100)
+    sports_equipment = models.CharField(max_length=100)
+    facility_availability = models.CharField(max_length=100)
+    equipment_access = models.CharField(max_length=100)
+    usage_frequency = models.CharField(max_length=100)
+    Labs_usage= models.CharField(max_length=100)
+    facility_up_to_date = models.CharField(max_length=100)
+    school_resources_availability = models.CharField(max_length=100)
+    library_usage = models.CharField(max_length=100)
+    coursework_improvement =models.CharField(max_length=5000)
+    sports_equipment_adequacy = models.CharField(max_length=100)
+    sports_facilities_wish = models.CharField(max_length=5000)
+    equipment_wish = models.CharField(max_length=5000)
+    experience_improvement = models.CharField(max_length=5000)
+    overall_satisfaction =models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'facilities'
+        
+class CampusFacilitiesFeedbackForm(ModelForm):
+    class Meta:
+        model = Facilities
+        fields = [
+            'halls_of_residence',
+            'cafeterias',
+            'Lecture_rooms',
+            'sports_equipment',
+            'facility_availability',
+            'equipment_access',
+            'usage_frequency',
+            'Labs_usage',
+            'facility_up_to_date',
+            'coursework_improvement',
+            'sports_equipment_adequacy',
+            'sports_facilities_wish',
+            'equipment_wish',
+            'experience_improvement',
+            'overall_satisfaction',
+        ]
+
+    def save(self, commit=True):
+        form_data = self.cleaned_data
+        # Save the form data to the database.
+        form_instance = super().save(commit=False)
+        if commit:
+            form_instance.save()
+            return form_instance
 
      

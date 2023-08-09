@@ -44,6 +44,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans:wght@800&display=swap" rel="stylesheet">
     </head>
     <body id="bg" >
+        <!--NAV-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-navbar">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/in-logo-1.svg' %}" alt=""></a>
@@ -75,125 +76,156 @@
                 {% endfor %}
             {% endif %}
         </div>
+        <!--YEAR AND SEMESTER SELSCTION-->
         <div class="container-sm">
-            <form action="/index" method="post"></form>
-            <!-- index.html --> 
-            <h2>Enter details</h2>
-            <!-- Year of study -->
-            <label for="year_of_study">Choose year of study:</label>
-            <select id="year_of_study" select>
-                {% for year in years_of_study %}
-                <option value="{{ year.id }}">{{ year }}</option>
-                {% endfor %}
-            </select>
-            <!-- Semester -->
-            <h2>Course feedback</h2>
-            <label for="semester">Select semester:</label>
-            <select id="semester_id" name="semester">
-                {% for semester in semester_data %}
-                <option value="{{ semester.id }}">{{ semester }}</option>
-                {% endfor %}
-            </select>
-            
-            <input class="btn btn-primary" type="submit" value="Submit">
-        </form>
-            </div>
-           
-
-            <div  id="courseUnitsContainer" class="course-units">
-                <div class="container mt-4">
-                <h2>Select course unit</h2>
-                    <div class="row row-cols-1 row-cols-md-5">
-                        <div class="col mb-4">
-                            <div class="card">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
-                                <div class="card-body">
-                                    <!--<h5 class="card-title">{{ card.course_name }}</h5>
-                                    <p class="card-text">{{ card.course_name }}</p>-->
-                                    <h5 class="card-title">BSE1101</h5>
-                                    <p class="card-text">WEB dev't</p>
-                                    <a href="form.html" class="btn btn-primary">Select</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-4">
-                            <div class="card">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
-                                <div class="card-body">
-                                    <h5 class="card-title">UNV1101</h5>
-                                    <p class="card-text">ommunication skills.</p>
-                                    <a href="form.html" class="btn btn-primary">Select</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-4">
-                            <div class="card">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
-                                <div class="card-body">
-                                    <h5 class="card-title">BSE1206</h5>
-                                    <p class="card-text">Programmin Concepts.</p>
-                                    <a href="form.html" class="btn btn-primary">Select</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-4">
-                            <div class="card">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
-                                <div class="card-body">
-                                    <h5 class="card-title">CSC1101</h5>
-                                    <p class="card-text">JavaScript.</p>
-                                    <a href="form.html" class="btn btn-primary">Select</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-4">
-                            <div class="card">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
-                                <div class="card-body">
-                                    <h5 class="card-title">BSE1108</h5>
-                                    <p class="card-text">TECHNICAL ANALYSIS.</p>
-                                    <a href="form.html" class="btn btn-primary">Select</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>   
-                </div>
+            <form method="GET">
+                <h5>Select </h5>
                 
-                <script>
-                    function loadCourseUnits() {
-                        const selectedSemester = document.getElementById("semester").value;
-                        const selectedYear = document.getElementById("year_of_study").value;
+                    <label for="year">Year:</label>
+                <select name="year_of_study" id="year">
+                    {% for year_option in years_of_study %}
+                        <option value="{{ year_option }}" {% if year_option == selected_year %}selected{% endif %}>{{ year_option }}</option>
+                    {% endfor %}
+                </select>
                 
-                        const xhr = new XMLHttpRequest();
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === 4 && xhr.status === 200) {
-                                const response = JSON.parse(xhr.responseText);
-                                const courseUnitsContainer = document.getElementById("courseUnitsContainer");
-                                courseUnitsContainer.innerHTML = "";
-                
-                                if (response.course_units.length > 0) {
-                                    response.course_units.forEach(course => {
-                                        const p = document.createElement("p");
-                                        p.textContent = course;
-                                        courseUnitsContainer.appendChild(p);
-                                    });
-                                } else {
-                                    const p = document.createElement("p");
-                                    p.textContent = "No course units found.";
-                                    courseUnitsContainer.appendChild(p);
-                                }
-                            }
-                        };
-                
-                        xhr.open("GET", `/get_course_units/?semester=${selectedSemester}&year=${selectedYear}`, true);
-                        xhr.send();
-                    }
-                </script>
-                
-            </div>
-            
+                <h5>Select </h5>
+                <label for="semester">Semester:</label>
+                <select name="semester" id="semester">
+                    {% for semester_option in semester_data %}
+                        <option value="{{ semester_option }}" {% if semester_option == selected_semester %}selected{% endif %}>{{ semester_option }}</option>
+                    {% endfor %}
+                </select>
+                <p></p>
+                <input class="btn btn-primary" type="submit">
+            </form>
         </div>
-            
+           
+        <!--COURSE UNIT CARDS-->
+        <div  id="courseUnitsContainer" class="course-units">
+            <div class="container mt-4">
+            <h2>Course Units</h2>
+                <div class="row row-cols-1 row-cols-md-5">
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+
+                                {% for course in courses %}
+                                    {% if forloop.counter0 == 0 %}
+                                        <h4>{{ course }}</h4>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="form.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                {% for course in courses %}
+                                    {% if forloop.counter0 == 1 %}
+                                        <h4>{{ course }}</h4>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="form.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                
+                                {% for course in courses %}
+                                    {% if forloop.counter0 == 2 %}
+                                        <h4>{{ course }}</h4>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="form.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                {% for course in courses %}
+                                    {% if forloop.counter0 == 3 %}
+                                        <h4>{{ course }}</h4>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="form.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                {% for course in courses %}
+                                    {% if forloop.counter0 == 4 %}
+                                        <h4>{{ course }}</h4>
+                                    {% endif %}
+                                {% endfor %}
+                                <a href="form.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
         
+        <!--FACILITIES CARDS-->
+        <div class="container mt-4">
+            <h2>Campus Facilities</h2>
+                <div class="row row-cols-1 row-cols-md-5">
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                        <h4>Lecture Rooms</h4>
+                                <a href="facilitiesform.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                <h4>Toilets</h4>
+                                <a href="facilitiesform.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                <h4>Library</h4>
+                                <a href="facilitiesform.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                <h4>Labaratories</h4>
+                                <a href="facilitiesform.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-4">
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone">
+                            <div class="card-body">
+                                <h4>Cafeteria</h4>
+                                <a href="facilitiesform.html" class="btn btn-primary">Select</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
     </body>
 </html>

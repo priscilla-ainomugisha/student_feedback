@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 #new
-from feedback.models import Card_info
+from feedback.models import Card_info, Facilities
 from feedback.models import Feedback
 from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.forms import modelformset_factory
@@ -240,4 +240,77 @@ FeedbackFormSet = inlineformset_factory(Card_info,Feedback,form=MultiStepForm,
                       extra=1,can_delete=True)
 
 
+class CampusFacilitiesFeedbackForm(forms.Form):
+    RATING_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+
+    USAGE_FREQUENCY_CHOICES = (
+        ('Never', 'Never'),
+        ('Rarely', 'Rarely'),
+        ('Monthly', 'Monthly'),
+        ('Weekly', 'Weekly'),
+        ('Daily', 'Daily'),
+    )
+
+    CONVENIENCE_CHOICES = (
+        ('Not at all', 'Not at all'),
+        ('Slightly', 'Slightly'),
+        ('Moderately', 'Moderately'),
+        ('Very', 'Very'),
+        ('Extremely', 'Extremely'),
+    )
+
+    SUGGESTIONS_MAX_LENGTH = 5000
+
+    halls_of_residence = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
+    cafeterias = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
+    Lecture_rooms = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
+    sports_equipment = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
+    facility_availability = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
+    equipment_access = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.RadioSelect)
+    usage_frequency = forms.ChoiceField(choices=USAGE_FREQUENCY_CHOICES)
+    Labs_usage= forms.ChoiceField(choices=CONVENIENCE_CHOICES)
+    facility_up_to_date = forms.ChoiceField(choices=CONVENIENCE_CHOICES)
+    school_resources_availability = forms.ChoiceField(choices=CONVENIENCE_CHOICES)
+    library_usage = forms.ChoiceField(choices=USAGE_FREQUENCY_CHOICES)
+    coursework_improvement = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
+    sports_equipment_adequacy = forms.ChoiceField(choices=CONVENIENCE_CHOICES)
+    sports_facilities_wish = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
+    equipment_wish = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
+    experience_improvement = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'maxlength': SUGGESTIONS_MAX_LENGTH}))
+    overall_satisfaction = forms.ChoiceField(choices=RATING_CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        form_data = self.cleaned_data  # Use self.cleaned_data to access the validated form data
+        saved_form = Facilities(**form_data)  # Assuming FeedbackModel is a Django model
+        saved_form.save()
+        return saved_form
+    class Meta:
+        model = Facilities
+        fields = (
+            'halls_of_residence',
+            'cafeterias',
+            'Lecture_rooms',
+            'sports_equipment',
+            'facility_availability',
+            'equipment_access',
+            'usage_frequency',
+            'Labs_usage',
+            'facility_up_to_date',
+            'coursework_improvement',
+            'sports_equipment_adequacy',
+            'sports_facilities_wish',
+            'equipment_wish',
+            'experience_improvement',
+            'overall_satisfaction',
+        )
+        label = 'Facilities Feedback'
 

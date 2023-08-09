@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.views import View
-from .forms import SignInForm, UserRegisterForm
+from .forms import CampusFacilitiesFeedbackForm, SignInForm, UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -69,6 +69,9 @@ def logout(request):
 def form(request):
     return render(request, "form.html")
 
+def facilitiesform(request):
+    return render(request, "facilitiesform.html")
+
 
 @login_required()
 def profile(request):
@@ -106,10 +109,6 @@ def get_course_units(request):
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
 
-def get_card_title(request):
-    card = Card_info.objects.first()
-    return render(request, 'index.html', {'card_title': card.course_name})
-
 def success_page_view(request):
     return render(request, 'success_page.html')
 
@@ -120,12 +119,25 @@ def multi_step_form_view(request):
         if form.is_valid():
             form.save() 
             messages.success(request, 'Form submitted successfully!')
-            return redirect('success-page') 
+            return redirect('index') 
             
     else:
         form = MultiStepForm()
 
     return render(request, 'form.html', {'form': form})
+
+def facilities(request):
+    if request.method == 'POST':
+        form = CampusFacilitiesFeedbackForm(request.POST)
+        if form.is_valid():
+            form.save() 
+            messages.success(request, 'Form submitted successfully!')
+            return redirect('index') 
+            
+    else:
+        form = CampusFacilitiesFeedbackForm()
+
+    return render(request, 'facilitiesform.html', {'form': form})
 
 
 
