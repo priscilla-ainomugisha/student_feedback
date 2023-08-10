@@ -6,6 +6,9 @@ from django.views import View
 from .forms import CampusFacilitiesFeedbackForm, SignInForm, UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.http import JsonResponse
 from .models import CourseInfo
 from .models import YearOfStudy
@@ -21,6 +24,7 @@ from django.core.files.storage import FileSystemStorage
 
 
 
+# Create your views here
 # Create your views here.
 def index(request):
     selected_semester = request.GET.get("semester", "1")  # Default to "1" if not provided
@@ -79,18 +83,44 @@ def profile(request):
 
 def register(request):
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Hi {username}, your account was created successfully')
-            return redirect('home')
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return HttpResponseRedirect("/administrator/signin")
+        else:
+            if user.is_superuser:
+                login(request, user)
+                return HttpResponseRedirect("/administrator/course")
+            else:
+                return HttpResponseRedirect("/")
     else:
-        form = UserRegisterForm()
-
-    return render(request, 'feedback/register.html', {'form': form})
+        return render(request, "auth/signin.html")
 
 
+def log_out(request):
+    logout(request=request)
+    return HttpResponseRedirect("/login")
+
+
+@login_required(login_url="/login")
+def facility_feedback(request):
+    return render(request, "facility_feedback.html")
+
+
+@login_required(login_url="/login")
+def instructor_feedback(request):
+    return render(request, "instructor_feedback.html")
+
+
+@login_required(login_url="/login")
+def course_feedback(request):
+    return render(request, "course_feedback.html")
+
+
+@login_required(login_url="/login")
+def index(request):
+    return render(request, "index.html")
 def home(request):
     return render(request, 'feedback/home.html')
 

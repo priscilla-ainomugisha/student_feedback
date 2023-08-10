@@ -1,11 +1,25 @@
-import requests
-from pprint import pprint
+import matplotlib.pyplot as plt
 
-form_id = "nuZNe3g5"
-token = "tfp_ZCpXR3kyiC3UNxtWkVx8f4NNjMsrXDo893ySs25Tx4S_3peHSKMXjB9XV4"
-headers = {"authorization": f"bearer {token}"}
-response = requests.get(
-    f"https://api.typeform.com/forms/{form_id}/responses", headers=headers
+# Data for the pie chart
+labels = ["Category A", "Category B", "Category C", "Category D"]
+sizes = [30, 25, 20, 25]  # Percentages for each category
+colors = ["blue", "green", "orange", "red"]
+explode = (0.1, 0, 0, 0)  # Explode the first slice (Category A)
+
+# Create a pie chart
+plt.pie(
+    sizes,
+    explode=explode,
+    labels=labels,
+    colors=colors,
+    autopct="%1.1f%%",
+    shadow=True,
+    startangle=140,
 )
+plt.axis("equal")  # Equal aspect ratio ensures the pie is circular
 
-pprint(response.json())
+# Add a title
+plt.title("Distribution of Categories")
+
+# Show the pie chart
+plt.show()
