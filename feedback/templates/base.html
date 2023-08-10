@@ -21,6 +21,9 @@
     />
 
     <style>
+  div {
+    margin: 0px;
+  }
       html {
         overflow: auto;
       }
@@ -52,7 +55,7 @@
     <!-- Custom styles for this template -->
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-navbar" style="margin: 0px;">
       <div class="container">
         <a class="navbar-brand" href=""
           ><img
@@ -100,15 +103,18 @@
           </ul>
           <form
             class="d-flex justify-content-between"
-            style="width: 200px"
-            id="authstyle"
+            style="width: 170px"
           >
             <a
               class="nav-link btn btn-success text-white"
               href="/administrator/signin"
               >Admin</a
             >
-            
+            <a
+              class="nav-link btn btn-danger text-white"
+              href="/logout"
+              >logout</a
+            >
           </form>
         </div>
       </div>
