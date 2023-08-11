@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.contrib.auth import login, logout, authenticate
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.http import JsonResponse
 from .models import CourseInfo
 from .models import YearOfStudy
@@ -83,6 +86,17 @@ def profile(request):
 
 def register(request):
     if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return HttpResponseRedirect("/administrator/signin")
+        else:
+            if user.is_superuser:
+                login(request, user)
+                return HttpResponseRedirect("/administrator/course")
+            else:
+                return HttpResponseRedirect("/")
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(username=username, password=password)

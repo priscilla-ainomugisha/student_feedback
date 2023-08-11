@@ -32,6 +32,7 @@
 
       }
 
+
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
@@ -63,6 +64,7 @@
       <div class="navbar-nav">
         <div class="nav-item text-nowrap">
           <a class="nav-link px-3" href="/logout/">Sign out</a>
+          <a class="nav-link px-3" href="/logout/">Sign out</a>
         </div>
       </div>
     </header>
@@ -76,12 +78,6 @@
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link {% block dashboard %}{% endblock dashboard %}" aria-current="page" href="/administrator/">
-                  <span data-feather="home"></span>
-                  Dashboard
-                </a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link {% block courses %}{% endblock courses %}" href="/administrator/course/">
                   <span data-feather="file"></span>
                   Courses
@@ -94,7 +90,6 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {% block instructors %}{% endblock instructors %}" href="/administrator/instructors/">
                 <a class="nav-link {% block instructors %}{% endblock instructors %}" href="/administrator/instructors/">
                   <span data-feather="users"></span>
                   Instructors
