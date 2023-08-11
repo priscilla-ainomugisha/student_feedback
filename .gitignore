@@ -1,3 +1,4 @@
 .hinttrc
 test.py
 token.json
+*.cpython-310.pyc
